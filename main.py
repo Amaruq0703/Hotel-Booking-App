@@ -51,6 +51,23 @@ class Confi:
         """
         return content
 
+class Spa(Confi):
+
+    def spaans(self):
+        self.spaans = input('Do you want a spa package? ')
+
+    def genticket(self):
+        if self.spaans == 'yes':
+            content = f"""
+            Thank you for your spa booking!
+            Spa info:
+            Name: {self.customername}
+            Hotel: {self.hotel.name}
+            """
+        else:
+            content = 'Ok'
+        return content
+
 print(df)
 hotelid = input('Enter hotel ID: ')
 hotel = Hotel(hotelid)
@@ -65,6 +82,9 @@ if hotel.availibility():
         hotel.bookhotel()
         conftick = Confi(customername =name.title(), hotelobj = hotel)
         print(conftick.genticket())
+        spagen = Spa(customername =name.title(), hotelobj = hotel)
+        spagen.spaans()
+        print(spagen.genticket())
     else:
         print('Problem with payment info')
 
