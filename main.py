@@ -1,7 +1,7 @@
 import pandas as pd 
 
 df = pd.read_csv('hotels.csv', dtype ={'id':str})
-
+carddf = pd.read_csv('cards.csv', dtype = str).to_dict(orient='records')
 class User:
     def getuser(self):
         pass
@@ -28,8 +28,15 @@ class Hotel:
             return False
 
 class Pay:
-    def payhotel(self):
-        pass
+    def __init__(self, number):
+        self.number = number
+    def payhotel(self, expir, name, cvc):
+        cardinfo = {'number': self.number, 'expiration': expir, 
+                    'cvc': cvc, 'holder': name}
+        if cardinfo in carddf:
+            return True
+        else:
+            return False
 
 class Confi:
     def __init__(self, customername, hotelobj):
@@ -49,10 +56,17 @@ hotelid = input('Enter hotel ID: ')
 hotel = Hotel(hotelid)
 
 if hotel.availibility():
-    hotel.bookhotel()
+    cardnum = input('Enter card no. ')
+    expiry = input('Enter card expiry: ')
+    cvc = input('Enter CVC: ')
     name = input('Enter your name: ')
-    conftick = Confi(customername =name, hotelobj = hotel)
-    print(conftick.genticket())
+    creditcard = Pay(cardnum)
+    if creditcard.payhotel(expiry, name.upper(), cvc):
+        hotel.bookhotel()
+        conftick = Confi(customername =name.title(), hotelobj = hotel)
+        print(conftick.genticket())
+    else:
+        print('Problem with payment info')
 
 else: 
     print('Hotel is not available')
